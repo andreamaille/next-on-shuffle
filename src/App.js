@@ -76,22 +76,21 @@ class App extends Component {
         format: 'json'
       }
     }).then((response) => {
-      response = response.data.topalbums.album[0].image[3]
+      response = response.data.topalbums.album[0]
 
-      
       // response = response.data.topalbums.album[0].image[3]
 
-      const imageArray = [...this.state.artistInfo];
+      const albumArray = [...this.state.artistInfo];
 
-      imageArray.push(response);
+      albumArray.push(response);
 
-      console.log(imageArray);
+      console.log(albumArray);
       
 
       // console.log(response, imageArray);
 
       this.setState({
-        artistInfo: imageArray
+        artistInfo: albumArray
       }, () => {
         
       });
@@ -184,31 +183,21 @@ class App extends Component {
 
             <ul>
 
-
-          
-
-
-
-              {this.state.similarArtistName.map((artist) => {
-                return (
-                    <Results artistName={artist} />
-                )
-              })}
-
-              {this.state.artistInfo.map((image) => {
-                let imageUrl = image['#text'];
-                return (
-                  <Results imageUrl={imageUrl} />
+              
+              {this.state.artistInfo.map((info) => {
+                let imageUrl = info.image[3]['#text'];
+                  return(
+                    <Results imageUrl={imageUrl} artist={info.artist.name} />
                   )
               })}
 
 
-              {this.state.artistTracks.map((track) => {
+
+            {this.state.artistTracks.map((track) => {
                 return (
                   track.map((index)=>{
                     return(
                       <Results albumTracks={index.name} />
-
                     )
                   })
                 )

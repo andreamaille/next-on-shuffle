@@ -7,13 +7,13 @@ const Results = (props) => {
 		
 		<div className="related-artist-result">
 			<div className="album-image">
+				<h2>{props.artist}</h2>
 				<img src={props.imageUrl} alt="" />
 			</div>
 			
-			<div className="artist-name">{props.artistName}</div>
 				
 			<div className="top-tracks">
-				<li>{props.albumTracks}</li>
+				{props.albumTracks}
 			</div>
 
 			
