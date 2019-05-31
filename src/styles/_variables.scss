@@ -1,0 +1,12 @@
+@mixin alignment ($flex-direction, $justify-content, $align-items, $text-align) {
+    display: flex;
+    flex-direction: $flex-direction;
+    justify-content: $justify-content;
+    align-items: $align-items;
+    text-align: $text-align;
+}
+
+@mixin colors ($color, $background-color) {
+    color:$color;
+    background-color:$background-color;
+}

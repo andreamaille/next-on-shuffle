@@ -1,28 +1,44 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import axios from 'axios'
-import './App.css';
+import './styles/App.scss';
 import RelatedArtists from './RelatedArtists.js'
 import RelatedTracks from './RelatedTracks.js'
-import headerImage from './header-dark-image.jpg';
 import { Link, animateScroll as scroll } from "react-scroll";
-
 
 
 class App extends Component {
   constructor () {
     super();
+    this.headingElement = React.createRef();
     this.state = {
       isLoading:true,
       isHidden:true,
+      isReset: true,
       chosenArtist:'',
       userInput:'',
       similarArtistName:[],
       artistInfo:[],
-      artistTracks:[]
+      artistTracks:[],
+      artistUnknown:true
     }
-  }  
+  }
 
-  callApiSimilarArtists = () => {
+  componentDidMount() {
+    this.setState({
+      isLoading:false,
+
+    })
+  }
+
+  scrollToMyRef = () => window.scrollTo(0, this.headingElement.current.offsetTop) 
+
+  searchError = () => {
+    this.setState({
+      artistUnknown: false,
+    })
+  }
+
+  callApiSimilarArtists = () => {                                 
     const apiKey = '4fb1117993625941ed0d8edc14f7ed9a';
     axios({
       method: 'GET',
@@ -40,16 +56,20 @@ class App extends Component {
       response = response.data.similarartists.artist
       
       this.setState({
-        similarArtists: response
+        similarArtists: response,
       }, () => {
         // console.log(this.state.similarArtists);
         this.getArtistInfo();
+        
       });
 
     }).catch(error => {
-      console.log('failed')
+      console.log('failed');
+      this.searchAgain();
+      this.searchError();
     })
   }
+
   // to send similar artist to API calls
   getArtistInfo = () => {
     const relatedArtists = this.state.similarArtists;
@@ -65,7 +85,6 @@ class App extends Component {
       this.callApiTopTracks(artist);
     }));
   }
-
   // used to get an image related to artist
   callApiTopAlbums = (artistName) => {
     const apiKey = '4fb1117993625941ed0d8edc14f7ed9a';
@@ -83,7 +102,6 @@ class App extends Component {
       }
     }).then((response) => {
       response = response.data.topalbums.album[0]
-
       // response = response.data.topalbums.album[0].image[3]
 
       const albumArray = [...this.state.artistInfo];
@@ -127,8 +145,6 @@ class App extends Component {
 
       topTracksArray.push(response)
 
-      
-
       this.setState({
         artistTracks: topTracksArray
       })
@@ -139,28 +155,42 @@ class App extends Component {
     })
   }
 
-
-
+  // on click of the submit button
   handleClick = (event) => {
     event.preventDefault();
-    // Getting a list of similar Artists 
+
     const userArtist = this.state.userInput;
+
     this.setState({
       userInput: '',
       chosenArtist: userArtist,
-      isHidden:false
+      isHidden:false,
     }, () => {
       this.callApiSimilarArtists();
+      this.resetButton();
+      
     })
   }
 
-  // scroll = () => {
-  //   const results = document.getElementById(this.state.isHidden);
+  resetButton = () => {
+    this.setState({
+      isReset: false,
+      artistUnknown:true,
+    })
+  }
 
-  //   results.scrollIntoView({ behavior: 'smooth' });
-  // }
-
-
+  searchAgain = () => {
+    this.setState({
+      isReset:true, 
+      chosenArtist: '',
+      isHidden: true,
+      chosenArtist: '',
+      userInput: '',
+      similarArtistName: [],
+      artistInfo: [],
+      artistTracks: [],
+    })
+  }
 
   handleChange = (event) => {
     this.setState({
@@ -168,76 +198,90 @@ class App extends Component {
     })
   }
 
+  
 
   render() {
-    
+
     return (
-      <div className="App">
-        <header>
-          <div className="header-content">
-            <h1>Next on Shuffle</h1>
-            <p>Discover new music with the music you already love. Enter an artist and explore new artists</p>
-            <form action="">
-              <label htmlFor="">Enter your artist</label>
-              <input
-                onChange={this.handleChange}
-                type="text"
-                placeholder="Search for Artist"
-                value={this.state.userInput}
-              />
-              <Link
-                activeClass="active"
-                to="related-artists"
-                spy={true}
-                smooth={true}
-                offset={-70}
-                duration={500}
-              >
-                <button onClick={this.handleClick}>Search</button>
-              </Link>
-            </form>
-          </div>
-        </header>
-        <main>
+      <Fragment>
+        {this.state.isLoading ? (<p>Loading... </p>) : (
+        <div className="App">
+          <header>
+            <div className="header-content">
+              <h1 tabIndex="1">Next on Shuffle</h1>
+              <p tabIndex="2">Discover new music with the music you already love.</p>
+              <p>Enter an artist and explore new artists</p>
+              {this.state.isReset ?
+              <form action="">
 
-          <section className="related-artists" id="related-artists">
-            {this.state.isHidden ? <div></div> : 
-              <div className="search-results">
+                <label htmlFor="">Enter your artist</label>
+                <input
+                  onChange={this.handleChange}
+                  type="text"
+                  placeholder="Search for Artist"
+                  value={this.state.userInput}
+                />
 
-                <h2>Related Artists</h2>
-                {this.state.artistInfo.map((info) => {
-                  let imageUrl = info.image[3]['#text'];
-                  return (
-                    <RelatedArtists imageUrl={imageUrl} artist={info.artist.name} albumUrl={info.artist.url} playCount={info.playcount} albumName={info.name}/>
-                  )
-                })}
-              </div>
-          }
-          </section>
+                <Link
+                  activeClass="active"
+                  to="related-artists"
+                  spy={true}
+                  smooth={true}
+                  offset={-70}
+                  duration={500}
+                >
+                  <button onClick={this.handleClick}>Search</button>
+                </Link>
+                </form>
+                : <button onClick={this.searchAgain} aria-describedby="After clicking on this button, you will be taken to related artist content">Search for another artist</button>}
 
-          <section className="related-tracks">
-            {this.state.isHidden ? <div></div> : 
+                {this.state.artistUnknown ? <p></p> : <p tabIndex="3">We couldn't find your requested artist. Please double check spelling or search for another artist</p>}
 
-            <div className="top-tracks">
-              <h2>Top Tracks Related to {this.state.chosenArtist}</h2>
-                {this.state.artistTracks.map((track) => {
-                  return (
-                    track.map((index) => {
-                      return (
-                        <RelatedTracks albumTracks={index.name} />
-                      )
-                    })
-                  )
-                })}
             </div>
-          }
-          </section>
-        </main>
-      </div>
+          </header>
+          
+          <main role="status" aria-live="polite">
+            <section className="related-artists" id="related-artists">
+              {this.state.isHidden ? <div></div> : 
+                <div className="search-results">
+
+                  <h2 ref={this.headingElement}>Related Artists</h2>
+
+                  {this.state.artistInfo.map((info, i) => {
+                    let imageUrl = info.image[3]['#text'];
+                    return (
+                      <RelatedArtists index={i} imageUrl={imageUrl} artist={info.artist.name} albumUrl={info.artist.url} playCount={info.playcount} albumName={info.name} scrollToMyRef={this.scrollToMyRef}/>
+                    )
+                  })}
+                </div>
+             }
+            </section>
+
+            <section className="related-tracks">
+              {this.state.isHidden ? <div></div> : 
+
+              <div className="top-tracks">
+                  <h2>Top Tracks Related to {this.state.chosenArtist}</h2>
+                  {this.state.artistTracks.map((track) => {
+                    return (
+                      track.map((index) => {
+                        return (
+                          <RelatedTracks headingRef={this.headingElement} albumTracks={index.name} />
+                        )
+                      })
+                    )
+                  })}
+                  <button type="reset" onClick={this.searchAgain}>Reset</button>
+              </div>
+            }
+            </section>
+          </main>
+        </div>
+        )
+      }
+      </Fragment>
     );
   }
-
 }
-
 
 export default App;
