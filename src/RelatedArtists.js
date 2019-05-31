@@ -1,14 +1,17 @@
 import React from 'react'
 
 
-const Results = (props) => {
+const RelatedArtists = (props) => {
 
 	return (
-		
 		<div className="related-artist-result">
+
 			<div className="album-image">
-				<h2>{props.artist}</h2>
+				<h3>{props.artist}</h3>
 				<img src={props.imageUrl} alt="" />
+				<a href={props.albumUrl}>Check out</a>
+				<p>Album Name: {props.albumName}</p>
+				<p>Album played: {props.playCount}</p>
 			</div>
 			
 				
@@ -16,9 +19,8 @@ const Results = (props) => {
 				{props.albumTracks}
 			</div>
 
-			
 		</div>
 	)
 }
 
-export default Results;
+export default RelatedArtists;

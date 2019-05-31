@@ -1,13 +1,19 @@
 import React, { Component } from 'react';
 import axios from 'axios'
 import './App.css';
-import Results from './Results.js'
+import RelatedArtists from './RelatedArtists.js'
+import RelatedTracks from './RelatedTracks.js'
+import headerImage from './header-dark-image.jpg';
+import { Link, animateScroll as scroll } from "react-scroll";
+
+
 
 class App extends Component {
   constructor () {
     super();
     this.state = {
       isLoading:true,
+      isHidden:true,
       chosenArtist:'',
       userInput:'',
       similarArtistName:[],
@@ -92,7 +98,7 @@ class App extends Component {
       this.setState({
         artistInfo: albumArray
       }, () => {
-        
+          // this.scroll();
       });
     
     }).catch(error => {
@@ -137,18 +143,24 @@ class App extends Component {
 
   handleClick = (event) => {
     event.preventDefault();
-
     // Getting a list of similar Artists 
     const userArtist = this.state.userInput;
-
     this.setState({
       userInput: '',
-      chosenArtist: userArtist
+      chosenArtist: userArtist,
+      isHidden:false
     }, () => {
       this.callApiSimilarArtists();
     })
-
   }
+
+  // scroll = () => {
+  //   const results = document.getElementById(this.state.isHidden);
+
+  //   results.scrollIntoView({ behavior: 'smooth' });
+  // }
+
+
 
   handleChange = (event) => {
     this.setState({
@@ -156,61 +168,71 @@ class App extends Component {
     })
   }
 
- 
 
   render() {
     
     return (
       <div className="App">
-      
         <header>
+          <div className="header-content">
+            <h1>Next on Shuffle</h1>
+            <p>Discover new music with the music you already love. Enter an artist and explore new artists</p>
+            <form action="">
+              <label htmlFor="">Enter your artist</label>
+              <input
+                onChange={this.handleChange}
+                type="text"
+                placeholder="Search for Artist"
+                value={this.state.userInput}
+              />
+              <Link
+                activeClass="active"
+                to="related-artists"
+                spy={true}
+                smooth={true}
+                offset={-70}
+                duration={500}
+              >
+                <button onClick={this.handleClick}>Search</button>
+              </Link>
+            </form>
+          </div>
+        </header>
+        <main>
 
-          <h1>App Title</h1>
-          <p>Discover new music with the music you already love. Enter an artist and explore new artists</p>
-          <form action="">
-            <label htmlFor="">Enter your artist</label>
-            <input
-              onChange={this.handleChange}
-              type="text"
-              placeholder="Search for Artist"
-              value={this.state.userInput}
-            />
-            <button onClick={this.handleClick}>Search</button>
-          </form>
-          </header>
+          <section className="related-artists" id="related-artists">
+            {this.state.isHidden ? <div></div> : 
+              <div className="search-results">
 
-          <main>
-
-            <ul>
-
-              
-              {this.state.artistInfo.map((info) => {
-                let imageUrl = info.image[3]['#text'];
-                  return(
-                    <Results imageUrl={imageUrl} artist={info.artist.name} />
+                <h2>Related Artists</h2>
+                {this.state.artistInfo.map((info) => {
+                  let imageUrl = info.image[3]['#text'];
+                  return (
+                    <RelatedArtists imageUrl={imageUrl} artist={info.artist.name} albumUrl={info.artist.url} playCount={info.playcount} albumName={info.name}/>
                   )
-              })}
+                })}
+              </div>
+          }
+          </section>
 
+          <section className="related-tracks">
+            {this.state.isHidden ? <div></div> : 
 
-
-            {this.state.artistTracks.map((track) => {
-                return (
-                  track.map((index)=>{
-                    return(
-                      <Results albumTracks={index.name} />
-                    )
-                  })
-                )
-              })}
-
-
-
-            </ul>
-            
-
-
-          </main>
-
+            <div className="top-tracks">
+              <h2>Top Tracks Related to {this.state.chosenArtist}</h2>
+                {this.state.artistTracks.map((track) => {
+                  return (
+                    track.map((index) => {
+                      return (
+                        <RelatedTracks albumTracks={index.name} />
+                      )
+                    })
+                  )
+                })}
+            </div>
+          }
+          </section>
+        </main>
       </div>
     );
   }

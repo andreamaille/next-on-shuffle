@@ -1,3 +1,38 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:800|PT+Sans|PT+Sans+Narrow&display=swap');
+
+
+/* 
+    font-family: 'Open Sans', sans-serif;
+
+    font-family: 'PT Sans', sans-serif;
+
+    font-family: 'PT Sans Narrow', sans-serif;
+ */
+
+
+header {
+  width:100%;
+  height:100vh;
+  background:url(./header-dark-image.jpg) left / contain no-repeat #171b1a;
+}
+
+h2 {
+  font-size: 80px;
+}
+
+body{
+  color: white;
+  background-color:#171b1a;
+}
+
+h1{
+  /* font-family: 'Open Sans', sans-serif; */
+  font-family: 'Open Sans', sans-serif;
+  font-size:120px;
+  margin:0;
+  padding:0;
+}
+
 .App {
   text-align: center;
 }
@@ -31,3 +66,5 @@
     transform: rotate(360deg);
   }
 }
+
+
