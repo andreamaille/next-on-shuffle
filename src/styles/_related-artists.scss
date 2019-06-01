@@ -4,6 +4,9 @@
     margin: 0 auto;
 }
 
+.search-results {
+    margin-top:50px;
+}
 .related-artist-results{
     @include alignment (row, space-between, flex-start, center);
     flex-wrap:wrap;
@@ -30,12 +33,34 @@
     display: block;
     margin:0 auto;
     padding:5px;
-    transition: background 0.5s ease;
+    transition: $transition-bg;
     &:hover {
         background-color: $secondaryColor;
     }
     &:focus, 
     &:active {
         background-color: $accentColor;
+    }
+}
+
+@media (max-width:1000px) { 
+    .related-artist-results {
+        @include alignment (row, space-between, center, center);
+        .related-artist-card {
+            width:48%;
+        }
+    }
+
+    .album-link {
+        width:100%;
+    }
+}
+
+@media (max-width:700px) { 
+    .related-artist-results {
+        @include alignment (column, center, center, center);
+        .related-artist-card {
+            width:95%;
+        }
     }
 }

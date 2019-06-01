@@ -232,7 +232,7 @@ class App extends Component {
                 </div>
                 }
 
-                {this.state.isArtistUnknown ? <p></p> : <p tabIndex="3">We couldn't find your requested artist. Please double check spelling or search for another artist</p>}
+                {this.state.isArtistUnknown ? <p></p> : <p tabIndex="3" className="error-message">We couldn't find your requested artist. Please check spelling or search for another artist</p>}
             </div>
           </div>
         </header>

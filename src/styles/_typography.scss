@@ -82,3 +82,53 @@ footer p {
     @include bodyFont(18);
     text-align: center;
 }
+
+@media (max-width:1100px) {
+    h1 {
+        @include displayFont(100);
+    }
+
+    h2 {
+        @include displayFont(80);
+    }
+
+    h3 {
+        @include subtitles(24);
+    }
+
+    input[type=text] {
+        @include bodyFont(20);
+    }  
+}
+
+@media (max-width:600px) {
+    h1 {
+        @include displayFont(80);
+    }
+
+    h2 {
+        @include displayFont(75);
+        padding:15px 0;
+    }
+
+    .top-tracks h2 {
+        @include displayFont(40);
+    }
+
+
+}
+
+@media (max-width:450px) {
+    h1 {
+        @include displayFont(60);
+    }
+
+    .subtitle {
+        padding:0;
+    }
+
+    .error-message {
+        @include bodyFont(18);
+    }
+}
+

@@ -18,3 +18,15 @@
     }
 }
 
+@media (max-width:700px) {
+    .related-track-links {
+        padding:5px;
+        margin:5px;
+    }
+}
+
+@media (max-width:550px) {
+    .related-artist-tracks {
+        @include alignment (row, center, center, center);
+    }
+}

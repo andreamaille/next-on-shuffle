@@ -39,7 +39,7 @@ button {
 	@include colors ($black, $white);
 	line-height: 1;
 	padding:6.5px 25px;
-	transition: background 0.5s ease;
+	transition: $transition-bg;
 	&:hover {
 		@include colors ($white, $black);
 	}
