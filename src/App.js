@@ -16,6 +16,7 @@ class App extends Component {
       isHidden:true,
       isReset: true,
       isArtistUnknown:true,
+      noResults:true,
       userArtist:'',
       userInput:'',
       relatedArtistArray:[],
@@ -63,15 +64,20 @@ class App extends Component {
       }
     }).then((response) => {
       response = response.data.similarartists.artist
-
       this.setState({
         similarArtists: response,
       }, () => {
-        // call function to map over array to pass to other API calls
-        this.getArtistInfo();
+          // checking if API has no suggestions for similar artists for user input
+          if (this.state.similarArtists.length === 0) {
+            this.noResults();
+          } else {
+            // call function to map over array to pass to other API calls
+            this.getArtistInfo();
+          }
       });
+      
     }).catch(error => {
-      //if user input does not return any similar artists, reset the form and display error message
+      //if user artist can not be found in API, reset the form and display error message
       this.resetForm();
       this.searchError();
     })
@@ -79,16 +85,20 @@ class App extends Component {
 
   // mapping over array to get similar artist names to pass to Api call functions
   getArtistInfo = () => {
+
     const relatedArtists = [...this.state.similarArtists];
+
     const artistName = relatedArtists.map(artist => {
       return(artist.name);
     })
+  
     this.setState({
       relatedArtistArray: artistName
     }, artistName.forEach(artist => { 
       this.callApiTopAlbums(artist);
       this.callApiTopTracks(artist);
     }));
+
   }
 
   // secondary Api call to get album data of similar artist
@@ -159,6 +169,7 @@ class App extends Component {
       isReset: true,
       isHidden: true,
       isArtistUnknown: true,
+      noResults:true,
       userArtist: '',
       userInput: '',
       relatedArtistArray: [],
@@ -177,6 +188,15 @@ class App extends Component {
   searchError = () => {
     this.setState({
       isArtistUnknown: false,
+
+    })
+  }
+
+  // if artist exists but API has no suggestions
+  noResults = () => {
+    this.setState({
+      noResults: false,
+      isHidden:true
     })
   }
 
@@ -231,8 +251,12 @@ class App extends Component {
                   <button onClick={this.resetForm} className="header-reset-button" aria-labelledby="After clicking on this button, you will be taken to related artist content">Search for another artist</button>
                 </div>
                 }
-
+                
+                {/* if artist is not in database */}
                 {this.state.isArtistUnknown ? <p></p> : <p tabIndex="3" className="error-message">We couldn't find your requested artist. Please check spelling or search for another artist</p>}
+
+                {/* if artist is in database but there are not suggested artists */}
+                {this.state.noResults ? <p></p> : <p tabIndex="3" className="error-message">There are no related artists for {this.state.userArtist}. Try another artist!</p>}
             </div>
           </div>
         </header>
@@ -284,7 +308,6 @@ class App extends Component {
             </div>
           }
         </footer>
-        
       </Fragment>
     );
   }
