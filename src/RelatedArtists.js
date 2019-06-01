@@ -1,12 +1,8 @@
 import React, { Component } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlayCircle } from '@fortawesome/free-regular-svg-icons';
 
 class RelatedArtists extends Component {
-	constructor(){
-		super();
-	}
-	
+
+	// for accessibility, to ensure that screen readers are taken to the beginning of the dynamic content
 	componentDidMount(){
 		this.props.scrollToMyRef();
 	}
@@ -16,6 +12,7 @@ class RelatedArtists extends Component {
 			<li className="related-artist-card">
 				<div className="inner-wrapper">
 					<h3>{this.props.artist}</h3>
+
 					<div className="image-container">
 						<a href={this.props.albumUrl}>
 							<img src={this.props.imageUrl} alt=""/>
@@ -29,10 +26,6 @@ class RelatedArtists extends Component {
 						<p>Plays:{this.props.playCount}</p>
 					</div>
 				</div>
-				<i class="far fa-play-circle"></i>
-				<div className="top-tracks">
-					{this.props.albumTracks}
-				</div>
 			</li>
 		)
 	}
@@ -40,4 +33,3 @@ class RelatedArtists extends Component {
 
 export default RelatedArtists;
 
-// 

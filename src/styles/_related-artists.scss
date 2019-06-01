@@ -1,31 +1,41 @@
-// Related Artists
+// Section - Related Artist Styles
+.inner-wrapper {
+    width:90%;
+    margin: 0 auto;
+}
 
-// container
 .related-artist-results{
     @include alignment (row, space-between, flex-start, center);
     flex-wrap:wrap;
     width:100%;
     padding:50px 0;
-}
-
-//card 
-
-.related-artist-card {
-    @include colors ($white, $black);
-    border: $border;
-    padding:10px;
-    width:31%;
-    margin-bottom:70px;
-    box-shadow: 15px 15px 0px 3px lighten($main-color, 5);
-}
-
-.image-container {
-    width: 90%;
-    margin: 0 auto;    
+    .related-artist-card {
+        @include colors ($white, $black);
+        border: $border;
+        padding:10px;
+        width:31%;
+        margin-bottom:70px;
+        box-shadow: 15px 15px 0px 3px lighten($secondaryColor, 5);
+    }
 }
 
 .image-container:hover img {
-    opacity: 0.8;
+    opacity: 0.6;
 }
 
-
+.album-link {
+    @include colors ($white, $black);
+    width:90%;
+    border: $border;
+    display: block;
+    margin:0 auto;
+    padding:5px;
+    transition: background 0.5s ease;
+    &:hover {
+        background-color: $secondaryColor;
+    }
+    &:focus, 
+    &:active {
+        background-color: $accentColor;
+    }
+}

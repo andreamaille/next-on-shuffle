@@ -188,104 +188,103 @@ class App extends Component {
   render() {
     return (
       <Fragment>
-        <body>
-          <header>
-            <div className="wrapper header-content">
+        <header>
+          <div className="wrapper header-content">
 
-              <div className="header-text">
+            <div className="header-text">
 
-                <h1 tabIndex="1">Next on Shuffle</h1>
-                  <div className="app-description" tabIndex="2">
-                    <p className="subtitle">New music is waiting for you.</p>
-                    <p>Discover new music with the music you already love. Enter your favourite artist or band to get started</p>
+              <h1 tabIndex="1">Next on Shuffle</h1>
+                <div className="app-description" tabIndex="2">
+                  <p className="subtitle">New music is waiting for you.</p>
+                  <p>Discover new music with the music you already love. Enter your favourite artist or band to get started</p>
+              </div>
+
+              {this.state.isReset ?
+
+                <form action="search-artists" method="POST" name="search-artists">
+                  <label htmlFor="search-button" className="visually-hidden">Enter your artist</label>
+
+                  <input
+                    onChange={this.handleChange}
+                    type="text"
+                    placeholder="Search for Artist"
+                    value={this.state.userInput}
+                    id="search-button"
+                    name="search-button"
+                  />
+
+                  <Link
+                    activeClass="active"
+                    to="related-artists"
+                    spy={true}
+                    smooth={true}
+                    offset={-70}
+                    duration={500}>
+                    <button onClick={this.handleClick} className="main-search-button">Search</button>
+                  </Link>
+                </form>
+
+                : 
+
+                <div className="header-reset">
+                  <p>Want more music?</p>
+                  <button onClick={this.resetForm} className="header-reset-button" aria-labelledby="After clicking on this button, you will be taken to related artist content">Search for another artist</button>
                 </div>
-
-                {this.state.isReset ?
-
-                  <form action="search-artists" method="POST" name="search-artists">
-                    <label htmlFor="search-button" className="visually-hidden">Enter your artist</label>
-
-                    <input
-                      onChange={this.handleChange}
-                      type="text"
-                      placeholder="Search for Artist"
-                      value={this.state.userInput}
-                      id="search-button"
-                      name="search-button"
-                    />
-
-                    <Link
-                      activeClass="active"
-                      to="related-artists"
-                      spy={true}
-                      smooth={true}
-                      offset={-70}
-                      duration={500}>
-                      <button onClick={this.handleClick}>Search</button>
-                    </Link>
-                  </form>
-
-                  : 
-
-                  <div className="header-reset">
-                    <p>Want more music?</p>
-                    <button onClick={this.resetForm} className="header-reset-button" aria-labelledby="After clicking on this button, you will be taken to related artist content">Search for another artist</button>
-                  </div>
-                  }
-
-                  {this.state.isArtistUnknown ? <p></p> : <p tabIndex="3">We couldn't find your requested artist. Please double check spelling or search for another artist</p>}
-              </div>
-            </div>
-          </header>
-          
-          <main role="status" aria-live="polite">
-            <div className="wrapper">
-              <section className="related-artists" id="related-artists">
-                {this.state.isHidden ? <div></div> : 
-                  <div className="search-results">
-                    <h2 ref={this.headingElement}>Related Artists</h2>
-
-                    <ul className="related-artist-results">
-                        {this.state.relatedArtistInfo.map((info, i) => {
-                        let imageUrl = info.image[3]['#text'];
-                        return (
-                          <RelatedArtists index={i} imageUrl={imageUrl} artist={info.artist.name} albumUrl={info.artist.url} playCount={info.playcount} albumName={info.name} scrollToMyRef={this.scrollToMyRef}/>)
-                      })}
-                    </ul>
-                  </div>
                 }
-              </section>
-              
-              <section className="related-tracks">
-                {this.state.isHidden ? <div></div> : 
-                  <div className="top-tracks">
-                    <h2>Top Tracks for {this.state.userArtist}</h2>
-                    <ul className="related-artist-tracks">
-                      {this.state.relatedArtistTracks.map((track) => {
-                        return(
-                          track.map((index) => {
-                            return (
-                              <RelatedTracks headingRef={this.headingElement} songName={index.name} songUrl={index.url} />
-                            )
-                          })
-                        )
-                      })}
-                    </ul>
-                    <button type="reset" onClick={this.resetForm} className="section-reset-button">Search Again</button>
-                  </div>
-                }
-              </section>
+
+                {this.state.isArtistUnknown ? <p></p> : <p tabIndex="3">We couldn't find your requested artist. Please double check spelling or search for another artist</p>}
             </div>
-          </main>
-          <footer>
-            {this.state.isHidden ? <div></div> : 
-              <div className="footer-text">
-                <p>Designed and coded by <a href="https://twitter.com/andrea_codes">andrea_codes</a></p>
-                <p> &copy; 2019</p>
-              </div>
-            }
-          </footer>
-        </body>
+          </div>
+        </header>
+        
+        <main role="status" aria-live="polite">
+          <div className="wrapper">
+            <section className="related-artists" id="related-artists">
+              {this.state.isHidden ? <div></div> : 
+                <div className="search-results">
+                  <h2 ref={this.headingElement}>Related Artists</h2>
+
+                  <ul className="related-artist-results">
+                      {this.state.relatedArtistInfo.map((info, index) => {
+                      let imageUrl = info.image[3]['#text'];
+                      return (
+                        <RelatedArtists key={index} imageUrl={imageUrl} artist={info.artist.name} albumUrl={info.artist.url} playCount={info.playcount} albumName={info.name} scrollToMyRef={this.scrollToMyRef}/>)
+                    })}
+                  </ul>
+                </div>
+              }
+            </section>
+            
+            <section className="related-tracks">
+              {this.state.isHidden ? <div></div> : 
+                <div className="top-tracks">
+                  <h2>Top Tracks for {this.state.userArtist}</h2>
+                  <ul className="related-artist-tracks">
+                    {this.state.relatedArtistTracks.map((track, index) => {
+                      return(
+                        track.map((index, indexTrack) => {
+                          return (
+                            <RelatedTracks key={indexTrack} headingRef={this.headingElement} songName={index.name} songUrl={index.url} />
+                          )
+                        })
+                      )
+                    })}
+                  </ul>
+                  <button type="reset" onClick={this.resetForm} className="section-reset-button">Search Again</button>
+                </div>
+              }
+            </section>
+          </div>
+        </main>
+        <footer>
+          {this.state.isHidden ? <div class="visually-hidden"></div> : 
+            <div className="footer-text">
+              <p> &copy; 2019</p>
+              <p>Designed and coded by <a href="https://twitter.com/andrea_codes">andrea_codes</a></p>
+            </div>
+          }
+        </footer>
+        
       </Fragment>
     );
   }

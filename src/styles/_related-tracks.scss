@@ -1,4 +1,4 @@
-// related-track-links
+// Section - Related Tracks Styles
 
 .related-artist-tracks {
     @include alignment (row, space-between, center, center);
@@ -6,13 +6,15 @@
 }
 
 .related-track-links {
-    @include colors ($white, $main-color);
+    @include colors ($white, $secondaryColor);
     display: inline-block;
     padding:10px;
     margin:10px;
     transition: $transition-bg;
-    &:hover {
-        background-color:$accent-color;
+    &:hover,
+    &:active,
+    &:focus {
+        background-color:$accentColor;
     }
 }
 

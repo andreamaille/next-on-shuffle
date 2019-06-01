@@ -2,61 +2,7 @@
 @import './_setup';
 @import './_variables.scss';
 @import './_typography';
+@import './_general.scss';
 @import './_header';
 @import './_related-artists';
 @import './_related-tracks';
-
-// General Styles 
-
-body{
-	color: white;
-	background-color:#171b1a;
-}
-
-img {
-	width: 100%;
-	max-width:100%;
-	margin:0;
-	padding:0;
-}
-
-.wrapper {
-	width:90%;
-	max-width: 1440px;
-	margin:0 auto;
-}
-
-ul, 
-li {
-	list-style-type: none;
-	margin:0;
-	padding:0;
-}
-
-button {
-	@include bodyFont(24);
-	@include colors ($black, $white);
-	line-height: 1;
-	margin-left:20px;
-	padding:6.5px 25px;
-	transition: background 0.5s ease;
-	&:hover {
-		@include colors ($white, $black);
-	}
-	&:focus,
-	&:active {
-		@include colors ($white, $main-color);
-	}
-}
-
-.section-reset-button {
-	margin:40px auto;
-	display: block;
-	padding:5px 50px;
-}
-
-footer {
-	height:5vh;
-}
-
-

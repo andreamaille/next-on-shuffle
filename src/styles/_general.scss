@@ -1,0 +1,62 @@
+// General Styles 
+body,
+.wrapper {
+    max-width: 1440px;
+    margin: 0 auto;
+}
+
+body {
+    @include colors ($white, $black);
+}
+
+.wrapper {
+    width:90%;
+}
+
+ul, 
+li, 
+img {
+    margin:0;
+	padding:0;
+}
+
+img {
+	width: 100%;
+	max-width:100%;
+}
+
+a {
+    text-decoration: none;
+    color: $white;
+}
+
+ul, 
+li {
+	list-style-type: none;
+}
+
+button {
+	@include colors ($black, $white);
+	line-height: 1;
+	padding:6.5px 25px;
+	transition: background 0.5s ease;
+	&:hover {
+		@include colors ($white, $black);
+	}
+	&:focus {
+		@include colors ($white, $secondaryColor);
+    }
+    &:active{
+        @include colors ($white, $accentColor);
+    }
+}
+
+.section-reset-button {
+	margin:40px auto;
+	display: block;
+	padding:5px 50px;
+}
+
+footer {
+    padding:10px 0;
+}
