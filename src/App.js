@@ -182,21 +182,24 @@ class App extends Component {
     this.setState({
       isReset: false,
       isArtistUnknown:true,
+      noResults: true,
     })
   }
 
+  // if artist does not exist in data pulled from API
   searchError = () => {
     this.setState({
       isArtistUnknown: false,
-
     })
   }
 
-  // if artist exists but API has no suggestions
+  // if artist exists but API has no suggestions for similar artists
   noResults = () => {
     this.setState({
+      isHidden:true,
       noResults: false,
-      isHidden:true
+      isArtistUnknown: true,
+      isReset: true
     })
   }
 
@@ -253,10 +256,10 @@ class App extends Component {
                 }
                 
                 {/* if artist is not in database */}
-                {this.state.isArtistUnknown ? <p></p> : <p tabIndex="3" className="error-message">We couldn't find your requested artist. Please check spelling or search for another artist</p>}
+                {this.state.isArtistUnknown ? <p></p> : <p tabIndex="3" className="error-message">We couldn't find your requested artist. Please check spelling and try again!</p>}
 
-                {/* if artist is in database but there are not suggested artists */}
-                {this.state.noResults ? <p></p> : <p tabIndex="3" className="error-message">There are no related artists for {this.state.userArtist}. Try another artist!</p>}
+                {/* if artist is in database but there are no suggested artists */}
+              {this.state.noResults ? <p></p> : <p tabIndex="3" className="error-message">There are no related artists for <span>{this.state.userArtist}</span>. Try another artist!</p>}
             </div>
           </div>
         </header>

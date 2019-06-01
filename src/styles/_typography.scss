@@ -13,6 +13,7 @@
     font-family: 'Roboto Condensed', sans-serif;
     text-transform: uppercase;
     letter-spacing: 5px;
+    line-height: 1;
 }
 
 @mixin bodyFont ($sizeValue) {
@@ -63,6 +64,12 @@ p{
     @include bodyFont(20);
     margin: 10px 0;
     padding:0;
+}
+
+span {
+    @include subtitles(20);
+    color:$black;
+    letter-spacing: 1px;
 }
 
 input[type=text] {

@@ -50,10 +50,9 @@ form {
 
 .error-message {
     @include colors ($white, $accentColor);
-    border: 2px solid $white;
+    margin-top:20px;
     padding:2px;
 }
-
 
 @media (max-width:1100px) {
     .header-content .header-text {
@@ -62,14 +61,7 @@ form {
 
     .header-reset {
         width:90%;
-        margin-top:25px;
         padding:10px;
-        border: $border;
-        box-shadow: 15px 15px 0px 3px lighten($secondaryColor, 5);
-        .header-reset-button {
-            display: block;
-            margin:10px auto;
-        }
     }
 }
 
@@ -96,12 +88,14 @@ form {
         background-size:cover;
     }
 
-    form input[type=text] {
-        width:60%;
-    }   
-
-    form .main-search-button {
-        margin-left:10px;
+    form {
+        margin-top:10px;
+        input[type=text] {
+            width:60%;
+        }   
+        .main-search-button {
+            margin-left:10px;
+        }
     }
 
     .header-content .header-text .app-description {
@@ -110,6 +104,12 @@ form {
 
     .header-content .header-text .error-message {
         width:100%;
+    }
+
+    .header-reset {
+        padding:5px;
+        margin-top:10px;
+        box-shadow: 8px 8px 0px 3px lighten($secondaryColor, 5);
     }
 }
 
@@ -129,6 +129,10 @@ form {
             margin-top:15px;
         }
     } 
+    .error-message {
+        margin-top:5px;
+        padding:2px;
+    }
 }
 
 
