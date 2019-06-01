@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPlayCircle } from '@fortawesome/free-regular-svg-icons';
 
 class RelatedArtists extends Component {
 	constructor(){
@@ -16,15 +17,19 @@ class RelatedArtists extends Component {
 				<div className="inner-wrapper">
 					<h3>{this.props.artist}</h3>
 					<div className="image-container">
-						<img src={this.props.imageUrl} alt=""/>
+						<a href={this.props.albumUrl}>
+							<img src={this.props.imageUrl} alt=""/>
+						</a>
 					</div>
+
 					<div className="album-info">
-						<a href={this.props.albumUrl}>Check out</a>
-						<p>Album Name: {this.props.albumName}</p>
-						<p>This album has been played:{this.props.playCount}</p>
+						<a href={this.props.albumUrl} className="album-link">
+							<p>Listen to {this.props.albumName}</p>
+						</a>
+						<p>Plays:{this.props.playCount}</p>
 					</div>
 				</div>
-					
+				<i class="far fa-play-circle"></i>
 				<div className="top-tracks">
 					{this.props.albumTracks}
 				</div>

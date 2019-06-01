@@ -4,6 +4,7 @@
 @import './_typography';
 @import './_header';
 @import './_related-artists';
+@import './_related-tracks';
 
 // General Styles 
 
@@ -47,3 +48,19 @@ button {
 		@include colors ($white, $main-color);
 	}
 }
+
+.section-reset-button {
+	margin:40px auto;
+	display: block;
+	padding:5px 50px;
+}
+
+footer {
+	height:10vh;
+	p {
+		margin:0;
+		padding:0;
+	}
+}
+
+

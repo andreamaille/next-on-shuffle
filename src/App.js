@@ -48,7 +48,7 @@ class App extends Component {
         api_key: apiKey,
         method: 'artist.getSimilar',
         artist: this.state.chosenArtist,
-        limit: 5,
+        limit: 6,
         autocorrect: 1,
         format: 'json'
       }
@@ -96,7 +96,7 @@ class App extends Component {
         api_key: apiKey,
         method: 'artist.getTopAlbums',
         artist: artistName,
-        limit: 5,
+        limit: 6,
         autocorrect: 1,
         format: 'json'
       }
@@ -134,7 +134,7 @@ class App extends Component {
         api_key: apiKey,
         method: 'artist.gettoptracks',
         artist: artistName,
-        limit: 5,
+        limit: 6,
         autocorrect: 1,
         format: 'json'
       }
@@ -240,7 +240,12 @@ class App extends Component {
                     <button onClick={this.handleClick}>Search</button>
                   </Link>
                   </form>
-                  : <button onClick={this.searchAgain} aria-describedby="After clicking on this button, you will be taken to related artist content">Search for another artist</button>}
+                  : 
+                  <div className="header-reset">
+                    <p>Want more music?</p>
+                    <button onClick={this.searchAgain} className="header-reset-button" aria-describedby="After clicking on this button, you will be taken to related artist content">Search for another artist</button>
+                  </div>
+                  }
 
                   {this.state.artistUnknown ? <p></p> : <p tabIndex="3">We couldn't find your requested artist. Please double check spelling or search for another artist</p>}
 
@@ -255,7 +260,7 @@ class App extends Component {
                 {this.state.isHidden ? <div></div> : 
                   <div className="search-results">
 
-                    <h2 ref={this.headingElement}>Related Artists</h2>
+                      <h2 ref={this.headingElement}>Related Artists</h2>
                     <ul className="related-artist-results">
                       {this.state.artistInfo.map((info, i) => {
                         let imageUrl = info.image[3]['#text'];
@@ -274,16 +279,18 @@ class App extends Component {
 
                 <div className="top-tracks">
                     <h2>Top Tracks for {this.state.chosenArtist}</h2>
-                    {this.state.artistTracks.map((track) => {
-                      return (
-                        track.map((index) => {
+                      <ul className="related-artist-tracks">
+                        {this.state.artistTracks.map((track) => {
                           return (
-                            <RelatedTracks headingRef={this.headingElement} albumTracks={index.name} />
+                            track.map((index) => {
+                              return (
+                                <RelatedTracks headingRef={this.headingElement} songName={index.name} songUrl={index.url}/>
+                              )
+                            })
                           )
-                        })
-                      )
-                    })}
-                    <button type="reset" onClick={this.searchAgain}>Reset</button>
+                        })}
+                      </ul>
+                    <button type="reset" onClick={this.searchAgain} className="section-reset-button">Search Again</button>
                 </div>
               }
               </section>

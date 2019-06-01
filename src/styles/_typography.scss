@@ -61,5 +61,36 @@ input[type=text] {
     line-height: 1;
     &::placeholder {
     text-align: left;
-}
+    }
 }  
+
+a{
+    text-decoration: none;
+}
+
+.album-link {
+    @include colors ($white, $black);
+    border: $border;
+    display: block;
+    width:90%;
+    margin:0 auto;
+    padding:5px;
+    transition: background 0.5s ease;
+    &:hover{
+        background-color: $main-color;
+    }
+}
+
+.header-reset {
+    p {
+        @include subtitles(25);
+        text-align: center;
+    }
+}
+
+footer p {
+    @include bodyFont(16);
+    text-align: center;
+    margin: 0;
+    padding:0;
+}
