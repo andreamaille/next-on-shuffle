@@ -1,0 +1,47 @@
+// Related Artists
+
+// container
+.related-artist-results{
+    @include alignment (row, space-between, center, center);
+    flex-wrap:wrap;
+    width:100%;
+    padding:50px 0;
+}
+
+//card 
+
+.related-artist-card {
+    @include colors ($white, $black);
+    border: $border;
+    padding:10px;
+    width:31.2%;
+    margin-bottom:40px;
+    box-shadow: 15px 15px 0px 3px lighten($main-color, 5);
+}
+
+.image-container {
+    width: 90%;
+    margin: 0 auto;
+}
+
+
+
+
+
+
+
+		// <li className="related-artist-card">
+		// 		<div className="inner-wrapper">
+		// 			<h3>{this.props.artist}</h3>
+		// 			<div className="image-container">
+		// 				<img src={this.props.imageUrl} alt=""/>
+		// 			</div>
+		// 			<a href={this.props.albumUrl}>Check out</a>
+		// 			<p>Album Name: {this.props.albumName}</p>
+		// 			<p>This album has been played:{this.props.playCount}</p>
+		// 		</div>
+					
+		// 		<div className="top-tracks">
+		// 			{this.props.albumTracks}
+		// 		</div>
+		// 	</li>

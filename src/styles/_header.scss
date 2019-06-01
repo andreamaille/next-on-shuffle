@@ -1,0 +1,39 @@
+header {
+  width:100%;
+  height:100vh;
+  background:url(./header-dark-image.jpg) left / contain no-repeat #171b1a;
+  
+}
+
+.header-content {
+    @include alignment (row, flex-end, center, left);
+    height:100%;
+    margin-top:50px;
+}
+
+.header-text {
+    width:60%;
+}
+
+.app-description {
+    width:70%;
+}
+
+form {
+    width: 100%;
+    margin-top:20px;
+	@include alignment (row, flex-start, center, left);
+}
+
+input[type=text] {
+    width:35%;
+    padding:5px;
+    &:focus,
+	&:active {
+        border: $border;
+        box-shadow: 6px 6px 0px 1px $main-color;
+	}
+}   
+
+
+

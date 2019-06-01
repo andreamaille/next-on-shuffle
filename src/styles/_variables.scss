@@ -1,3 +1,17 @@
+// Colors 
+$white:#fefefe;
+$accent-color:#b75047;
+$main-color:#4c8dab;
+$black: #151c1c;
+
+$border: 2px solid $main-color;
+
+@mixin colors ($color, $background-color) {
+    color:$color;
+    background-color:$background-color;
+}
+
+
 @mixin alignment ($flex-direction, $justify-content, $align-items, $text-align) {
     display: flex;
     flex-direction: $flex-direction;

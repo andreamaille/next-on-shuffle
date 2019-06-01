@@ -1,74 +1,49 @@
-@import url('https://fonts.googleapis.com/css?family=Open+Sans:800|PT+Sans|PT+Sans+Narrow&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Roboto+Condensed:400,700&display=swap" rel="stylesheet');
+@import './_setup';
 @import './_variables.scss';
 @import './_typography';
-/* 
-    font-family: 'Open Sans', sans-serif;
-    font-family: 'PT Sans', sans-serif;
-    font-family: 'PT Sans Narrow', sans-serif;
- */
+@import './_header';
+@import './_related-artists';
 
-header {
-  width:100%;
-  height:100vh;
-  background:url(./header-dark-image.jpg) left / contain no-repeat #171b1a;
-  @include alignment (row, right, center, left);
-}
-
-.header-content {
-  width:60%;
-}
-
-h2,
-h3 {
-  font-size: 80px;
-}
+// General Styles 
 
 body{
-  color: white;
-  background-color:#171b1a;
+	color: white;
+	background-color:#171b1a;
 }
 
-h1{
-  /* font-family: 'Open Sans', sans-serif; */
-  font-family: 'Open Sans', sans-serif;
-  font-size:120px;
-  line-height: 1;
-  margin:0;
-  padding:0;
+img {
+	width: 100%;
+	max-width:100%;
+	margin:0;
+	padding:0;
 }
 
-p {
-  font-family: 'PT Sans', sans-serif;
-  font-size:18px;
+.wrapper {
+	width:90%;
+	max-width: 1440px;
+	margin:0 auto;
 }
 
-.App {
-  text-align: center;
+ul, 
+li {
+	list-style-type: none;
+	margin:0;
+	padding:0;
 }
 
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+button {
+	@include bodyFont(24);
+	@include colors ($black, $white);
+	line-height: 1;
+	margin-left:20px;
+	padding:6.5px 25px;
+	transition: background 0.5s ease;
+	&:hover {
+		@include colors ($white, $black);
+	}
+	&:focus,
+	&:active {
+		@include colors ($white, $main-color);
+	}
 }
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-

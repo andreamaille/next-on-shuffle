@@ -207,74 +207,87 @@ class App extends Component {
         {this.state.isLoading ? (<p>Loading... </p>) : (
         <div className="App">
           <header>
-            <div className="header-content">
-              <h1 tabIndex="1">Next on Shuffle</h1>
-              <p tabIndex="2">Discover new music with the music you already love.</p>
-              <p>Enter an artist and explore new artists</p>
-              {this.state.isReset ?
-              <form action="">
+            <div className="wrapper header-content">
+              <div className="header-text">
+                <h1 tabIndex="1">Next on Shuffle</h1>
+                  <div className="app-description" tabIndex="2">
+                    <p className="subtitle">New music is waiting for you.</p>
+                    <p>Discover new music with the music you already love. Enter your favourite artist or band to get started</p>
+                </div>
 
-                <label htmlFor="">Enter your artist</label>
-                <input
-                  onChange={this.handleChange}
-                  type="text"
-                  placeholder="Search for Artist"
-                  value={this.state.userInput}
-                />
 
-                <Link
-                  activeClass="active"
-                  to="related-artists"
-                  spy={true}
-                  smooth={true}
-                  offset={-70}
-                  duration={500}
-                >
-                  <button onClick={this.handleClick}>Search</button>
-                </Link>
-                </form>
-                : <button onClick={this.searchAgain} aria-describedby="After clicking on this button, you will be taken to related artist content">Search for another artist</button>}
+                {this.state.isReset ?
+                <form action="">
 
-                {this.state.artistUnknown ? <p></p> : <p tabIndex="3">We couldn't find your requested artist. Please double check spelling or search for another artist</p>}
+                  <label htmlFor="search-button" className="visually-hidden">Enter your artist</label>
+                  <input
+                    onChange={this.handleChange}
+                    type="text"
+                    placeholder="Search for Artist"
+                    value={this.state.userInput}
+                    id="search-button"
+                    name="search-button"
+                  />
 
+                  <Link
+                    activeClass="active"
+                    to="related-artists"
+                    spy={true}
+                    smooth={true}
+                    offset={-70}
+                    duration={500}
+                  >
+                    <button onClick={this.handleClick}>Search</button>
+                  </Link>
+                  </form>
+                  : <button onClick={this.searchAgain} aria-describedby="After clicking on this button, you will be taken to related artist content">Search for another artist</button>}
+
+                  {this.state.artistUnknown ? <p></p> : <p tabIndex="3">We couldn't find your requested artist. Please double check spelling or search for another artist</p>}
+
+              </div>
             </div>
           </header>
           
           <main role="status" aria-live="polite">
-            <section className="related-artists" id="related-artists">
-              {this.state.isHidden ? <div></div> : 
-                <div className="search-results">
 
-                  <h2 ref={this.headingElement}>Related Artists</h2>
+          <div className="wrapper">
+              <section className="related-artists" id="related-artists">
+                {this.state.isHidden ? <div></div> : 
+                  <div className="search-results">
 
-                  {this.state.artistInfo.map((info, i) => {
-                    let imageUrl = info.image[3]['#text'];
-                    return (
-                      <RelatedArtists index={i} imageUrl={imageUrl} artist={info.artist.name} albumUrl={info.artist.url} playCount={info.playcount} albumName={info.name} scrollToMyRef={this.scrollToMyRef}/>
-                    )
-                  })}
-                </div>
-             }
-            </section>
-
-            <section className="related-tracks">
-              {this.state.isHidden ? <div></div> : 
-
-              <div className="top-tracks">
-                  <h2>Top Tracks Related to {this.state.chosenArtist}</h2>
-                  {this.state.artistTracks.map((track) => {
-                    return (
-                      track.map((index) => {
+                    <h2 ref={this.headingElement}>Related Artists</h2>
+                    <ul className="related-artist-results">
+                      {this.state.artistInfo.map((info, i) => {
+                        let imageUrl = info.image[3]['#text'];
                         return (
-                          <RelatedTracks headingRef={this.headingElement} albumTracks={index.name} />
+                          <RelatedArtists index={i} imageUrl={imageUrl} artist={info.artist.name} albumUrl={info.artist.url} playCount={info.playcount} albumName={info.name} scrollToMyRef={this.scrollToMyRef}/>
                         )
-                      })
-                    )
-                  })}
-                  <button type="reset" onClick={this.searchAgain}>Reset</button>
-              </div>
-            }
-            </section>
+                      })}
+                    </ul>
+                  </div>
+              }
+              </section>
+
+
+              <section className="related-tracks">
+                {this.state.isHidden ? <div></div> : 
+
+                <div className="top-tracks">
+                    <h2>Top Tracks for {this.state.chosenArtist}</h2>
+                    {this.state.artistTracks.map((track) => {
+                      return (
+                        track.map((index) => {
+                          return (
+                            <RelatedTracks headingRef={this.headingElement} albumTracks={index.name} />
+                          )
+                        })
+                      )
+                    })}
+                    <button type="reset" onClick={this.searchAgain}>Reset</button>
+                </div>
+              }
+              </section>
+            </div>
           </main>
         </div>
         )
