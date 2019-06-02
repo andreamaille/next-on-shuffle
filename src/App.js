@@ -3,7 +3,10 @@ import axios from 'axios'
 import './styles/App.scss';
 import RelatedArtists from './RelatedArtists.js'
 import RelatedTracks from './RelatedTracks.js'
-import { Link } from "react-scroll";
+import PreviousSearches from './PreviousSearches.js'
+import { Link } from 'react-scroll'
+import firebase from './firebase';
+
 
 class App extends Component {
   constructor () {
@@ -21,7 +24,8 @@ class App extends Component {
       userInput:'',
       relatedArtistArray:[],
       relatedArtistInfo:[],
-      relatedArtistTracks:[]
+      relatedArtistTracks:[],
+      previousUserArtists: []
     }
   }
 
@@ -37,7 +41,8 @@ class App extends Component {
     event.preventDefault();
     //save user input 
     const userArtist = this.state.userInput;
-    // store user input in state
+
+     // store user input in state
     this.setState({
       userArtist: userArtist,
       isHidden: false,
@@ -46,6 +51,14 @@ class App extends Component {
       this.resetButton();
     })
   }
+
+  searchArtist = (event) => {
+    event.preventDefault();
+    
+
+
+  }
+
 
   // call Api to get similar artists to user's chosen artist
   callApiSimilarArtists = () => {
@@ -71,6 +84,11 @@ class App extends Component {
           if (this.state.similarArtists.length === 0) {
             this.noResults();
           } else {
+            // store user input in firebase
+            const dbRef = firebase.database().ref() 
+
+            dbRef.push(this.state.userInput);
+
             // call function to map over array to pass to other API calls
             this.getArtistInfo();
           }
@@ -85,20 +103,17 @@ class App extends Component {
 
   // mapping over array to get similar artist names to pass to Api call functions
   getArtistInfo = () => {
-
     const relatedArtists = [...this.state.similarArtists];
-
     const artistName = relatedArtists.map(artist => {
       return(artist.name);
     })
-  
     this.setState({
       relatedArtistArray: artistName
     }, artistName.forEach(artist => { 
       this.callApiTopAlbums(artist);
       this.callApiTopTracks(artist);
     }));
-
+    this.getFirebaseArtists();
   }
 
   // secondary Api call to get album data of similar artist
@@ -124,7 +139,8 @@ class App extends Component {
       albumArray.push(response);
 
       this.setState({
-        relatedArtistInfo: albumArray
+        relatedArtistInfo: albumArray,
+        isLoading:false
       })
 
     }).catch(error => {
@@ -163,9 +179,32 @@ class App extends Component {
     })
   }
 
+  getFirebaseArtists = () => {
+    const dbRef = firebase.database().ref().limitToLast(4)
+
+    dbRef.on('value', (response) => {
+      const pastArtists = [];
+      const data = response.val()
+
+
+      for (let key in data) {
+        pastArtists.push({
+          id: key,
+          name: data[key],
+        });
+      }
+
+      this.setState({
+        previousUserArtists: pastArtists
+      })
+    })
+  }
+
+  
   // For error-handling and resetting the form
   resetForm = () => {
     this.setState({
+      isLoading:true,
       isReset: true,
       isHidden: true,
       isArtistUnknown: true,
@@ -180,6 +219,7 @@ class App extends Component {
 
   resetButton = () => {
     this.setState({
+      isLoading: true,
       isReset: false,
       isArtistUnknown:true,
       noResults: true,
@@ -239,6 +279,7 @@ class App extends Component {
                   <Link
                     activeClass="active"
                     to="related-artists"
+                    id="related-artists"
                     spy={true}
                     smooth={true}
                     offset={-70}
@@ -251,7 +292,7 @@ class App extends Component {
 
                 <div className="header-reset">
                   <p>Want more music?</p>
-                  <button onClick={this.resetForm} className="header-reset-button" aria-labelledby="After clicking on this button, you will be taken to related artist content">Search for another artist</button>
+                  <button onClick={this.resetForm} className="header-reset-button" aria-labelledby="After clicking on this button, you will be taken to related artist content">Search for Another Artist</button>
                 </div>
                 }
                 
@@ -263,54 +304,91 @@ class App extends Component {
             </div>
           </div>
         </header>
-        
-        <main role="status" aria-live="polite">
-          <div className="wrapper">
-            <section className="related-artists" id="related-artists">
-              {this.state.isHidden ? <div></div> : 
-                <div className="search-results">
-                  <h2 ref={this.headingElement}>Related Artists</h2>
+        {/* while loading, stay on header until Api data is loaded */}
+        {this.state.isLoading ? "" :
+          <main role="status" aria-live="polite">
+            <div className="wrapper">
+              <section className="related-artists" id="related-artists">
+                {this.state.isHidden ? <div></div> : 
+                  <div className="search-results">
+                    <h2 ref={this.headingElement}>Related Artists</h2>
 
-                  <ul className="related-artist-results">
-                      {this.state.relatedArtistInfo.map((info, index) => {
-                      let imageUrl = info.image[3]['#text'];
-                      return (
-                        <RelatedArtists key={index} imageUrl={imageUrl} artist={info.artist.name} albumUrl={info.artist.url} playCount={info.playcount} albumName={info.name} scrollToMyRef={this.scrollToMyRef}/>)
-                    })}
-                  </ul>
-                </div>
-              }
-            </section>
-            
-            <section className="related-tracks">
-              {this.state.isHidden ? <div></div> : 
-                <div className="top-tracks">
-                  <h2>Top Tracks for {this.state.userArtist}</h2>
-                  <ul className="related-artist-tracks">
-                    {this.state.relatedArtistTracks.map((track, index) => {
-                      return(
-                        track.map((index, indexTrack) => {
-                          return (
-                            <RelatedTracks key={indexTrack} headingRef={this.headingElement} songName={index.name} songUrl={index.url} />
-                          )
-                        })
-                      )
-                    })}
-                  </ul>
-                  <button type="reset" onClick={this.resetForm} className="section-reset-button">Search Again</button>
-                </div>
-              }
-            </section>
-          </div>
-        </main>
-        <footer>
-          {this.state.isHidden ? <div class="visually-hidden"></div> : 
-            <div className="footer-text">
-              <p> &copy; 2019</p>
-              <p>Designed and coded by <a href="https://twitter.com/andrea_codes">andrea_codes</a></p>
+                    <ul className="related-artist-results">
+                        {this.state.relatedArtistInfo.map((info, index) => {
+                        let imageUrl = info.image[3]['#text'];
+                        return (
+                          <RelatedArtists key={index} imageUrl={imageUrl} artist={info.artist.name} albumUrl={info.artist.url} playCount={info.playcount} albumName={info.name} scrollToMyRef={this.scrollToMyRef}/>)
+                      })}
+                    </ul>
+                  </div>
+                }
+              </section>
+              
+              <section className="related-tracks">
+                {this.state.isHidden ? <div></div> : 
+                  <div className="top-tracks">
+                    <h2>Top Tracks for {this.state.userArtist}</h2>
+                    <ul className="related-artist-tracks">
+                      {this.state.relatedArtistTracks.map((track, index) => {
+                        return(
+                          track.map((index, indexTrack) => {
+                            return (
+                              <RelatedTracks key={indexTrack} headingRef={this.headingElement} songName={index.name} songUrl={index.url} />
+                            )
+                          })
+                        )
+                      })}
+                    </ul>
+                  </div>
+                }
+              </section>
+
+              <section className="previous-user-searches">
+                {this.state.isHidden ? <div></div> :
+                  <div className="other-searches">
+                    <h2>Recently Searched</h2>
+                    <ul className="previous-artist-searches">
+                      {this.state.previousUserArtists.map((artist, index) => {
+                        return(
+                          <li key={index}>
+                              <p>{artist.name}</p>
+                          </li>
+                        )
+                      })}
+                    </ul>
+                    <button type="reset" onClick={this.resetForm} className="section-reset-button">Search Again</button>
+                  </div>
+                }
+              </section>
+
             </div>
-          }
-        </footer>
+          </main>
+        }
+          <footer>
+            {this.state.isHidden ? <div className="visually-hidden"></div> : 
+              <div className="footer-text">
+                <div className="spinner">
+                  <div className="rect1"></div>
+                  <div className="rect2"></div>
+                  <div className="rect3"></div>
+                  <div className="rect4"></div>
+                  <div className="rect5"></div>
+                  <div className="rect1"></div>
+                  <div className="rect2"></div>
+                  <div className="rect3"></div>
+                  <div className="rect4"></div>
+                  <div className="rect5"></div>
+                  <div className="rect1"></div>
+                  <div className="rect2"></div>
+                  <div className="rect3"></div>
+                  <div className="rect4"></div>
+                  <div className="rect5"></div>
+                </div>
+                <p> &copy; 2019</p>
+                <p>Designed and coded by <a href="https://twitter.com/andrea_codes">andrea_codes</a></p>
+              </div>
+            }
+          </footer>
       </Fragment>
     );
   }

@@ -35,10 +35,6 @@ li {
 	list-style-type: none;
 }
 
-span {
-    color:$black;
-}
-
 button {
 	@include colors ($black, $white);
 	line-height: 1;
@@ -54,6 +50,7 @@ button {
         @include colors ($white, $accentColor);
     }
 }
+
 
 .section-reset-button {
 	margin:40px auto;
