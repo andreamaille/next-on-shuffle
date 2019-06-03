@@ -26,50 +26,28 @@ class App extends Component {
       recentlyViewedArtists: []
     }
   }
-
   // binds the input
   handleChange = (event) => {
     this.setState({
       userInput: event.target.value
     })
   }
-
-  // on click of button, the user input will be stored and then used to call the APIs 
+  // on click of search button, the user input will be stored and then used to call the API. searchAgain function is also called to hide search bar and asks user if they would like to search for another artist.
   handleClick = (event) => {
     event.preventDefault();
     //save user input 
     const userArtist = this.state.userInput;
-
      // store user input in state
     this.setState({
       userArtist: userArtist,
       isHidden: false
     }, () => {
       this.callApiSimilarArtists();
-      this.resetButton();
+      this.searchAgain();
     })
   }
 
-  artistSearch = (event) => {
-    event.preventDefault();
-
-    const selectedArtist = event.currentTarget.dataset.id;
-
-    this.setState ({
-      userInput: selectedArtist,
-      userArtist:selectedArtist,
-      relatedArtistArray: [],
-      relatedArtistInfo: [],
-      relatedArtistTracks: [],
-      recentlyViewedArtists: []
-    }, () => {
-        this.callApiSimilarArtists();
-        // this.callApiSimilarArtists();
-        console.log(this.state.userInput)
-    })
-  }
-
-  // call Api to get similar artists to user's chosen artist
+  // calls Api to get similar artists based on user's chosen artist
   callApiSimilarArtists = () => {
     const apiKey = '4fb1117993625941ed0d8edc14f7ed9a';
     axios({
@@ -89,28 +67,25 @@ class App extends Component {
       this.setState({
         similarArtists: response,
       }, () => {
-          // checking if API has no suggestions for similar artists for user input
+          // if API has no similar artist suggestions for user's chosen artist, displays message to user to choose a different artist
           if (this.state.similarArtists.length === 0) {
             this.noResults();
           } else {
-            // store user input in firebase
+            // if API has similar artists suggestions for user's chosen artist, stores user input in firebase
             const dbRef = firebase.database().ref() 
-
             dbRef.push(this.state.userInput);
-
-            // call function to map over array to pass to other API calls
+            // calls function to map over similarArtist array to pass to other API calls
             this.getArtistInfo();
           }
       });
-      
     }).catch(error => {
-      //if user artist can not be found in API, reset the form and display error message
+      //if user's chosen artist can not be found in API data, call functions to reset the form and display error message
       this.resetForm();
       this.searchError();
     })
   }
 
-  // mapping over array to get similar artist names to pass to Api call functions
+  // maps over similarArtists array to get artist names to pass to other Api calls. Also calls getFirebaseArtists function to get recently searched artists stored in Firebase
   getArtistInfo = () => {
     const relatedArtists = [...this.state.similarArtists];
     const artistName = relatedArtists.map(artist => {
@@ -125,7 +100,7 @@ class App extends Component {
     this.getFirebaseArtists();
   }
 
-  // secondary Api call to get album data of similar artist
+  // secondary API call to get album data of similar artists
   callApiTopAlbums = (artistName) => {
     const apiKey = '4fb1117993625941ed0d8edc14f7ed9a';
     axios({
@@ -151,13 +126,12 @@ class App extends Component {
         relatedArtistInfo: albumArray,
         isLoading:false
       })
-
     }).catch(error => {
-      console.log('failed')
+      alert('Sorry - we failed to get data back from our API at this time. Please check back later!');
     })
   }
 
-  // secondary Api call to get top tracks of similar artist
+  // secondary API call to get top tracks of similar artists
   callApiTopTracks = (artistName) => {
     const apiKey = '4fb1117993625941ed0d8edc14f7ed9a';
     axios({
@@ -184,33 +158,51 @@ class App extends Component {
       })
       
     }).catch(error => {
-      console.log('failed')
+      alert('Sorry - we failed to get data back from our API at this time. Please check back later!');
     })
   }
 
+  // grabs the last 5 values in our firebase database to display on page in Recently Viewed Artists section
   getFirebaseArtists = () => {
     const dbRef = firebase.database().ref().limitToLast(5)
 
     dbRef.on('value', (response) => {
-      const pastArtists = [];
+      const previousArtists = [];
       const data = response.val()
 
-
       for (let key in data) {
-        pastArtists.push({
+        previousArtists.push({
           id: key,
           name: data[key],
         });
       }
 
       this.setState({
-        recentlyViewedArtists: pastArtists
+        recentlyViewedArtists: previousArtists
       })
     })
   }
 
+  // on click of an artist in Recently Viewed Artist Section, searches for similar artists 
+  artistSearch = (event) => {
+    event.preventDefault();
+
+    const selectedArtist = event.currentTarget.dataset.id;
+
+    // sets the userInput and userArtist values to the artist's name that was clicked on and clears the arrays to accept new data from the API calls
+    this.setState({
+      userInput: selectedArtist,
+      userArtist: selectedArtist,
+      relatedArtistArray: [],
+      relatedArtistInfo: [],
+      relatedArtistTracks: [],
+      recentlyViewedArtists: []
+    }, () => {
+      this.callApiSimilarArtists();
+    })
+  }
   
-  // For error-handling and resetting the form
+  // Resets the form to accept the next search
   resetForm = () => {
     this.setState({
       isLoading:true,
@@ -226,23 +218,24 @@ class App extends Component {
     })
   }
 
-  resetButton = () => {
+  // For error handling - hides search bar and asks user if they would like to search for another artist
+  searchAgain = () => {
     this.setState({
       isLoading: true,
       isReset: false,
       isArtistUnknown:true,
-      noResults: true,
+      noResults: true
     })
   }
 
-  // if artist does not exist in data pulled from API
+  // if artist does not exist in API data, displays message to user
   searchError = () => {
     this.setState({
       isArtistUnknown: false,
     })
   }
 
-  // if artist exists but API has no suggestions for similar artists
+  // if artist exists in API data but API has no suggestions for similar artists, displays message to user
   noResults = () => {
     this.setState({
       isHidden:true,
@@ -252,8 +245,6 @@ class App extends Component {
     })
   }
 
-
-  
   // For accessibility - to ensure that screen readers are taken to the beginning of the dynamic content
   scrollToMyRef = () => {
     window.scrollTo(0, this.headingElement.current.offsetTop)
@@ -264,20 +255,16 @@ class App extends Component {
       <Fragment>
         <header>
           <div className="wrapper header-content">
-
             <div className="header-text">
-
               <h1 tabIndex="1">Next on Shuffle</h1>
                 <div className="app-description" tabIndex="2">
                   <p className="subtitle">New music is waiting for you.</p>
-                  <p>Discover new music with the music you already love. Enter your favourite artist or band to get started</p>
+                  <p>Discover new music with the music you already love. Enter your favorite artist or band to get started</p>
               </div>
-
               {this.state.isReset ?
 
                 <form action="search-artists" method="POST" name="search-artists">
                   <label htmlFor="search-button" className="visually-hidden">Enter your artist</label>
-
                   <input
                     onChange={this.handleChange}
                     type="text"
@@ -295,13 +282,14 @@ class App extends Component {
                     smooth={true}
                     offset={-70}
                     duration={500}>
-                    <button onClick={this.handleClick} className="main-search-button">Search</button>
+                    <button onClick={this.handleClick} className="main-search-button" aria-label="After clicking on this button, you will be taken directly to the Related Artists Section">Search</button>
                   </Link>
                 </form>
 
                 : 
 
                 <div className="header-reset">
+                  {/* sound wave animation */}
                   <div className="spinner">
                     <div className="rect1"></div>
                     <div className="rect2"></div>
@@ -319,84 +307,73 @@ class App extends Component {
                     <div className="rect4"></div>
                     <div className="rect5"></div>
                   </div>
-              
                   <p>Want more music?</p>
-                  
-                  <button onClick={this.resetForm} className="header-reset-button" aria-label="After clicking on this button, you will be taken to related artist content">Search for Another Artist</button>
+                  <button onClick={this.resetForm} className="header-reset-button">Search for Another Artist</button>
                 </div>
                 }
-                
-                {/* if artist is not in database */}
-                {this.state.isArtistUnknown ? <p></p> : <p tabIndex="3" className="error-message">We couldn't find your requested artist. Please check spelling and try again!</p>}
+                {/* error handling - if artist is not in database */}
+                {this.state.isArtistUnknown ? ' ' : <p tabIndex="3" className="error-message">We couldn't find your requested artist. Please check spelling and try again!</p>}
 
-                {/* if artist is in database but there are no suggested artists */}
-              {this.state.noResults ? <p></p> : <p tabIndex="3" className="error-message">There are no related artists for <span>{this.state.userArtist}</span>. Try another artist!</p>}
+                {/* error handling - if artist is in database but there are no suggested artists */}
+                {this.state.noResults ? ' ' : <p tabIndex="3" className="error-message">There are no related artists for <span>{this.state.userArtist}</span>. Try another artist!</p>}
             </div>
           </div>
         </header>
-        {/* while loading, stay on header until Api data is loaded */}
-        {this.state.isLoading ? "" :
+        {/* while page loads, stays on header until API data can be loaded */}
+        {this.state.isLoading ? ' ' :
           <main role="status" aria-live="polite">
             <div className="wrapper">
               <section className="related-artists" id="related-artists">
-                {this.state.isHidden ? <div></div> : 
-                  <div className="search-results">
-                    <h2 ref={this.headingElement} tabIndex="4">Related Artists</h2>
-
-                    <ul className="related-artist-results">
-                        {this.state.relatedArtistInfo.map((info, index) => {
+                <div className="search-results">
+                  <h2 ref={this.headingElement} tabIndex="4">Related Artists</h2>
+                  <ul className="related-artist-results">
+                      {this.state.relatedArtistInfo.map((info, index) => {
                         let imageUrl = info.image[3]['#text'];
                         return (
-                          <RelatedArtists key={index} imageUrl={imageUrl} artist={info.artist.name} albumUrl={info.artist.url} playCount={info.playcount} albumName={info.name} scrollToMyRef={this.scrollToMyRef} tabindex={index}/>)
+                          <RelatedArtists key={index} imageUrl={imageUrl} artist={info.artist.name} albumUrl={info.artist.url} playCount={info.playcount} albumName={info.name} scrollToMyRef={this.scrollToMyRef}/>)
                       })}
-                    </ul>
-                  </div>
-                }
+                  </ul>
+                </div>
               </section>
               
               <section className="related-tracks">
-                {this.state.isHidden ? <div></div> : 
-                  <div className="top-tracks">
-                    <h2 tabIndex="5">Top Tracks for {this.state.userArtist}</h2>
-                    <a href="#previous-searches" className="visually-hidden skip-link"> Skip Top Tracks Section for your chosen artist and skip to Recently Searched Artists</a>
-                    <ul className="related-artist-tracks">
-                      {this.state.relatedArtistTracks.map((track, index) => {
-                        return(
-                          track.map((index, indexTrack) => {
-                            return (
-                              <RelatedTracks key={indexTrack} headingRef={this.headingElement} songName={index.name} songUrl={index.url} tabIndex={index}/>
-                            )
-                          })
-                        )
-                      })}
-                    </ul>
-                  </div>
-                }
+                <div className="related-tracks-wrapper">
+                  <h2 tabIndex="5">Top Tracks for {this.state.userArtist}</h2>
+                  <a href="#recently-viewed-section" className="visually-hidden skip-link"> Skip Top Tracks Section for your chosen artist and skip to Recently Searched Artists</a>
+                  <ul className="related-artist-tracks">
+                    {this.state.relatedArtistTracks.map((track, index) => {
+                      return(
+                        track.map((index, indexTrack) => {
+                          return (
+                            <RelatedTracks key={indexTrack} headingRef={this.headingElement} songName={index.name} songUrl={index.url}/>
+                          )
+                        })
+                      )
+                    })}
+                  </ul>
+                </div>
               </section>
 
-              <section className="previous-user-searches" id="previous-searches">
-                {this.state.isHidden ? <div></div> :
-                  <div className="other-searches">
-                    <h2 tabIndex="6">Recently Viewed Artists</h2>
-                    <ul className="previous-artist-searches">
-                      {this.state.recentlyViewedArtists.map((artist, index) => {
-                        return(
-                          <li key={index} className="previous-artist-searches-card" onClick={this.artistSearch} data-id={artist.name}>
-                                <p className="artist-name" tabIndex={index}>{artist.name}</p>
-                          </li>
-                        )
-                      })}
-                    </ul>
-                    <button type="reset" onClick={this.resetForm} className="section-reset-button">Search Again</button>
-                  </div>
-                }
+              <section className="recently-viewed-section" id="recently-viewed-section">
+                <div className="recently-viewed-wrapper">
+                  <h2 tabIndex="6">Recently Viewed Artists</h2>
+                  <ul className="recent-artists">
+                    {this.state.recentlyViewedArtists.map((artist, index) => {
+                      return(
+                        <li key={index} className="recent-artists-card" onClick={this.artistSearch} data-id={artist.name}>
+                            <p className="artist-name" tabIndex={index}>{artist.name}</p>
+                        </li>
+                      )
+                    })}
+                  </ul>
+                  <button type="reset" onClick={this.resetForm} className="section-reset-button">Search Again</button>
+                </div>
               </section>
-
             </div>
           </main>
         }
           <footer>
-            {this.state.isHidden ? <div className="visually-hidden"></div> : 
+            {this.state.isHidden ? ' ' : 
               <div className="footer-text">
                 <div className="spinner">
                   <div className="rect1"></div>

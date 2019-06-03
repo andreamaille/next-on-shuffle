@@ -19,9 +19,9 @@ header {
 }
 
 form {
+	@include alignment (row, flex-start, center, left);
     width: 100%;
     margin-top:20px;
-	@include alignment (row, flex-start, center, left);
     input[type=text] {
         width:40%;
         padding:5px;
@@ -58,7 +58,6 @@ form {
     .header-content .header-text {
         width:50%;
     }
-
     .header-reset {
         width:90%;
         padding:10px;
@@ -87,7 +86,10 @@ form {
         background-position: left;
         background-size:cover;
     }
-
+    .header-reset {
+        width:100%;
+        padding:10px;
+    }
     form {
         margin-top:10px;
         input[type=text] {
@@ -97,15 +99,12 @@ form {
             margin-left:10px;
         }
     }
-
     .header-content .header-text .app-description {
         width:90%;
     }
-
     .header-content .header-text .error-message {
         width:100%;
     }
-
     .header-reset {
         padding:5px;
         margin-top:10px;
@@ -118,7 +117,6 @@ form {
         width:90%;
         padding:15px;
     }
-
     form {
         @include alignment (column, flex-start, center, left);
         input[type=text] {
