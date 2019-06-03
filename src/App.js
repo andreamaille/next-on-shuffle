@@ -52,7 +52,7 @@ class App extends Component {
     const apiKey = '4fb1117993625941ed0d8edc14f7ed9a';
     axios({
       method: 'GET',
-      url: 'http://ws.audioscrobbler.com/2.0/',
+      url: 'https://ws.audioscrobbler.com/2.0/',
       dataResponse: 'JSON',
       params: {
         api_key: apiKey,
@@ -105,7 +105,7 @@ class App extends Component {
     const apiKey = '4fb1117993625941ed0d8edc14f7ed9a';
     axios({
       method: 'GET',
-      url: 'http://ws.audioscrobbler.com/2.0/',
+      url: 'https://ws.audioscrobbler.com/2.0/',
       dataResponse: 'JSON',
       params: {
         api_key: apiKey,
@@ -136,7 +136,7 @@ class App extends Component {
     const apiKey = '4fb1117993625941ed0d8edc14f7ed9a';
     axios({
       method: 'GET',
-      url: 'http://ws.audioscrobbler.com/2.0/',
+      url: 'https://ws.audioscrobbler.com/2.0/',
       dataResponse: 'JSON',
       params: {
         api_key: apiKey,
