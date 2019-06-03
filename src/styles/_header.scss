@@ -54,6 +54,8 @@ form {
     padding:2px;
 }
 
+// Media Queries
+
 @media (max-width:1100px) {
     .header-content .header-text {
         width:50%;
@@ -133,4 +135,36 @@ form {
     }
 }
 
+// For landscape view on smaller screen sizes
+@media (max-height:420px) {
+    .header-content .header-text {
+        width:90%;
+        padding:10px;
+        .app-description {
+            width:100%;
+        }
+    }
+    .app-description {
+        .subtitle {
+            margin:1px;
+        }
+        p {
+            margin:2px;
+            line-height: 0.9;
+        }
+    }
+}
 
+// For larger tablets
+@media (min-width: 1024px) and (min-height:1366px) {
+    .header-content {
+        @include alignment (column, center, center, left);
+        width:75%;
+        .header-text {
+            width:80%;
+            padding:20px;
+            background-color:rgba(23, 27, 26, 0.8);
+            border: 2px solid $white;
+        }
+    }
+}

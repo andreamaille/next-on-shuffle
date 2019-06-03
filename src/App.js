@@ -3,6 +3,8 @@ import axios from 'axios'
 import './styles/App.scss';
 import RelatedArtists from './RelatedArtists.js'
 import RelatedTracks from './RelatedTracks.js'
+import Animation from './Animation.js'
+import Footer from './Footer.js'
 import { Link } from 'react-scroll'
 import firebase from './firebase';
 
@@ -32,7 +34,7 @@ class App extends Component {
       userInput: event.target.value
     })
   }
-  // on click of search button, the user input will be stored and then used to call the API. searchAgain function is also called to hide search bar and asks user if they would like to search for another artist.
+  // on click of search button, the user input will be stored and then used to call the API. searchAgain function is also called to hide search bar and display message asking user if they would like to search for a different artist
   handleClick = (event) => {
     event.preventDefault();
     //save user input 
@@ -162,7 +164,7 @@ class App extends Component {
     })
   }
 
-  // grabs the last 5 values in our firebase database to display on page in Recently Viewed Artists section
+  // grabs the last 5 values in firebase database to display on page in Recently Viewed Artists section
   getFirebaseArtists = () => {
     const dbRef = firebase.database().ref().limitToLast(5)
 
@@ -260,7 +262,7 @@ class App extends Component {
                 <div className="app-description" tabIndex="2">
                   <p className="subtitle">New music is waiting for you.</p>
                   <p>Discover new music with the music you already love. Enter your favorite artist or band to get started</p>
-              </div>
+                </div>
               {this.state.isReset ?
 
                 <form action="search-artists" method="POST" name="search-artists">
@@ -289,24 +291,7 @@ class App extends Component {
                 : 
 
                 <div className="header-reset">
-                  {/* sound wave animation */}
-                  <div className="spinner">
-                    <div className="rect1"></div>
-                    <div className="rect2"></div>
-                    <div className="rect3"></div>
-                    <div className="rect4"></div>
-                    <div className="rect5"></div>
-                    <div className="rect1"></div>
-                    <div className="rect2"></div>
-                    <div className="rect3"></div>
-                    <div className="rect4"></div>
-                    <div className="rect5"></div>
-                    <div className="rect1"></div>
-                    <div className="rect2"></div>
-                    <div className="rect3"></div>
-                    <div className="rect4"></div>
-                    <div className="rect5"></div>
-                  </div>
+                  <Animation />
                   <p>Want more music?</p>
                   <button onClick={this.resetForm} className="header-reset-button">Search for Another Artist</button>
                 </div>
@@ -326,6 +311,7 @@ class App extends Component {
               <section className="related-artists" id="related-artists">
                 <div className="search-results">
                   <h2 ref={this.headingElement} tabIndex="4">Related Artists</h2>
+                  <a href="#related-tracks" className="visually-hidden skip-link"> Skip Related Artists Section and to go to Top Tracks Section</a>
                   <ul className="related-artist-results">
                       {this.state.relatedArtistInfo.map((info, index) => {
                         let imageUrl = info.image[3]['#text'];
@@ -336,10 +322,10 @@ class App extends Component {
                 </div>
               </section>
               
-              <section className="related-tracks">
+              <section className="related-tracks" id="related-tracks">
                 <div className="related-tracks-wrapper">
                   <h2 tabIndex="5">Top Tracks for {this.state.userArtist}</h2>
-                  <a href="#recently-viewed-section" className="visually-hidden skip-link"> Skip Top Tracks Section for your chosen artist and skip to Recently Searched Artists</a>
+                  <a href="#recently-viewed-section" className="visually-hidden skip-link"> Skip Top Tracks Section and to go to Recently Searched Artists</a>
                   <ul className="related-artist-tracks">
                     {this.state.relatedArtistTracks.map((track, index) => {
                       return(
@@ -372,31 +358,9 @@ class App extends Component {
             </div>
           </main>
         }
-          <footer>
-            {this.state.isHidden ? ' ' : 
-              <div className="footer-text">
-                <div className="spinner">
-                  <div className="rect1"></div>
-                  <div className="rect2"></div>
-                  <div className="rect3"></div>
-                  <div className="rect4"></div>
-                  <div className="rect5"></div>
-                  <div className="rect1"></div>
-                  <div className="rect2"></div>
-                  <div className="rect3"></div>
-                  <div className="rect4"></div>
-                  <div className="rect5"></div>
-                  <div className="rect1"></div>
-                  <div className="rect2"></div>
-                  <div className="rect3"></div>
-                  <div className="rect4"></div>
-                  <div className="rect5"></div>
-                </div>
-                <p> &copy; 2019</p>
-                <p>Designed and coded by <a href="https://twitter.com/andrea_codes">andrea_codes</a></p>
-              </div>
-            }
-          </footer>
+        {this.state.isHidden ? ' ' : 
+          <Footer />
+        }
       </Fragment>
     );
   }

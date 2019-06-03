@@ -5,7 +5,7 @@
 }
 
 .search-results {
-    margin-top:50px;
+    margin-top:100px;
 }
 
 .related-artist-results{
@@ -15,10 +15,10 @@
     padding:50px 0;
     .related-artist-card {
         @include colors ($white, $black);
-        border: $border;
-        padding:10px;
         width:31%;
         margin-bottom:70px;
+        padding:10px;
+        border: $border;
         box-shadow: 15px 15px 0px 3px lighten($secondaryColor, 5);
     }
 }
@@ -30,10 +30,10 @@
 .album-link {
     @include colors ($white, $black);
     width:90%;
-    border: $border;
-    display: block;
     margin:0 auto;
     padding:5px;
+    display: block;
+    border: $border;
     transition: $transition-bg;
     &:hover {
         background-color: $secondaryColor;
@@ -43,6 +43,8 @@
         background-color: $accentColor;
     }
 }
+
+// Media Queries
 
 @media (max-width:1000px) { 
     .related-artist-results {

@@ -6,9 +6,9 @@
 
 .related-track-links {
     @include colors ($white, $secondaryColor);
-    display: inline-block;
-    padding:10px;
     margin:10px;
+    padding:10px;
+    display: inline-block;
     transition: $transition-bg;
     &:hover,
     &:active,
@@ -17,10 +17,12 @@
     }
 }
 
+// Media Queries 
+
 @media (max-width:700px) {
     .related-track-links {
-        padding:5px;
         margin:5px;
+        padding:5px;
     }
 }
 

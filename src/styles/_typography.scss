@@ -34,10 +34,6 @@ footer p {
     padding:0;
 }
 
-h1{
-    @include displayFont(140);
-}
-
 h2 {
     @include displayFont(100);
 }
@@ -74,11 +70,15 @@ span {
 
 // Header Styles
 
+h1{
+    @include displayFont(140);
+}
+
 input[type=text] {
     @include bodyFont(24);
     line-height: 1;
     &::placeholder {
-    text-align: left;
+        text-align: left;
     }
 }  
 
@@ -100,6 +100,7 @@ footer p {
     text-align: center;
 }
 
+// Media Queries
 @media (max-width:1100px) {
     h1 {
         @include displayFont(100);
