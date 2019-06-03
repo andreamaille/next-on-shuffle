@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/andrea-maille-project-five/static/css/main.dd15aa86.chunk.css",
-    "main.js": "/andrea-maille-project-five/static/js/main.e9e6323b.chunk.js",
-    "main.js.map": "/andrea-maille-project-five/static/js/main.e9e6323b.chunk.js.map",
+    "main.css": "/andrea-maille-project-five/static/css/main.fde01650.chunk.css",
+    "main.js": "/andrea-maille-project-five/static/js/main.4beb57d3.chunk.js",
+    "main.js.map": "/andrea-maille-project-five/static/js/main.4beb57d3.chunk.js.map",
     "runtime~main.js": "/andrea-maille-project-five/static/js/runtime~main.c5ae9c19.js",
     "runtime~main.js.map": "/andrea-maille-project-five/static/js/runtime~main.c5ae9c19.js.map",
     "static/js/2.d27cf5fa.chunk.js": "/andrea-maille-project-five/static/js/2.d27cf5fa.chunk.js",
     "static/js/2.d27cf5fa.chunk.js.map": "/andrea-maille-project-five/static/js/2.d27cf5fa.chunk.js.map",
     "index.html": "/andrea-maille-project-five/index.html",
-    "precache-manifest.552f310f464800b6b98b0cf03e6ada45.js": "/andrea-maille-project-five/precache-manifest.552f310f464800b6b98b0cf03e6ada45.js",
+    "precache-manifest.2f31287a1779e5786b2cd1373c6b24a1.js": "/andrea-maille-project-five/precache-manifest.2f31287a1779e5786b2cd1373c6b24a1.js",
     "service-worker.js": "/andrea-maille-project-five/service-worker.js",
-    "static/css/main.dd15aa86.chunk.css.map": "/andrea-maille-project-five/static/css/main.dd15aa86.chunk.css.map",
+    "static/css/main.fde01650.chunk.css.map": "/andrea-maille-project-five/static/css/main.fde01650.chunk.css.map",
     "static/media/App.scss": "/andrea-maille-project-five/static/media/mixtape.9cef9b6f.jpg"
   }
 }
