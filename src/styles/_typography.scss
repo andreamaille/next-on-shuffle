@@ -22,6 +22,17 @@
     line-height: 1.3;
 }
 
+.artist-name {
+    @include displayFont (30);
+    color:$white;
+    text-transform: uppercase;
+//     text-shadow:
+//    -1px -1px 0 $secondaryColor,  
+//     1px -1px 0 $secondaryColor,
+//     -1px 1px 0 $secondaryColor,
+//      1px 1px 0 $secondaryColor;
+}
+
 html {
     font-size: 125%;
 }

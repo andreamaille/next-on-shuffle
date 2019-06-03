@@ -3,15 +3,13 @@ import axios from 'axios'
 import './styles/App.scss';
 import RelatedArtists from './RelatedArtists.js'
 import RelatedTracks from './RelatedTracks.js'
-import PreviousSearches from './PreviousSearches.js'
 import { Link } from 'react-scroll'
 import firebase from './firebase';
-
 
 class App extends Component {
   constructor () {
     super();
-    // Ref for accessibility of dynamic con
+    // Ref for accessibility of dynamic content
     this.headingElement = React.createRef();
     // stored data  
     this.state = {
@@ -25,7 +23,7 @@ class App extends Component {
       relatedArtistArray:[],
       relatedArtistInfo:[],
       relatedArtistTracks:[],
-      previousUserArtists: []
+      recentlyViewedArtists: []
     }
   }
 
@@ -45,20 +43,31 @@ class App extends Component {
      // store user input in state
     this.setState({
       userArtist: userArtist,
-      isHidden: false,
+      isHidden: false
     }, () => {
       this.callApiSimilarArtists();
       this.resetButton();
     })
   }
 
-  searchArtist = (event) => {
+  artistSearch = (event) => {
     event.preventDefault();
-    
 
+    const selectedArtist = event.currentTarget.dataset.id;
 
+    this.setState ({
+      userInput: selectedArtist,
+      userArtist:selectedArtist,
+      relatedArtistArray: [],
+      relatedArtistInfo: [],
+      relatedArtistTracks: [],
+      recentlyViewedArtists: []
+    }, () => {
+        this.callApiSimilarArtists();
+        // this.callApiSimilarArtists();
+        console.log(this.state.userInput)
+    })
   }
-
 
   // call Api to get similar artists to user's chosen artist
   callApiSimilarArtists = () => {
@@ -180,7 +189,7 @@ class App extends Component {
   }
 
   getFirebaseArtists = () => {
-    const dbRef = firebase.database().ref().limitToLast(4)
+    const dbRef = firebase.database().ref().limitToLast(5)
 
     dbRef.on('value', (response) => {
       const pastArtists = [];
@@ -195,7 +204,7 @@ class App extends Component {
       }
 
       this.setState({
-        previousUserArtists: pastArtists
+        recentlyViewedArtists: pastArtists
       })
     })
   }
@@ -243,6 +252,8 @@ class App extends Component {
     })
   }
 
+
+  
   // For accessibility - to ensure that screen readers are taken to the beginning of the dynamic content
   scrollToMyRef = () => {
     window.scrollTo(0, this.headingElement.current.offsetTop)
@@ -291,8 +302,27 @@ class App extends Component {
                 : 
 
                 <div className="header-reset">
+                  <div className="spinner">
+                    <div className="rect1"></div>
+                    <div className="rect2"></div>
+                    <div className="rect3"></div>
+                    <div className="rect4"></div>
+                    <div className="rect5"></div>
+                    <div className="rect1"></div>
+                    <div className="rect2"></div>
+                    <div className="rect3"></div>
+                    <div className="rect4"></div>
+                    <div className="rect5"></div>
+                    <div className="rect1"></div>
+                    <div className="rect2"></div>
+                    <div className="rect3"></div>
+                    <div className="rect4"></div>
+                    <div className="rect5"></div>
+                  </div>
+              
                   <p>Want more music?</p>
-                  <button onClick={this.resetForm} className="header-reset-button" aria-labelledby="After clicking on this button, you will be taken to related artist content">Search for Another Artist</button>
+                  
+                  <button onClick={this.resetForm} className="header-reset-button" aria-label="After clicking on this button, you will be taken to related artist content">Search for Another Artist</button>
                 </div>
                 }
                 
@@ -311,13 +341,13 @@ class App extends Component {
               <section className="related-artists" id="related-artists">
                 {this.state.isHidden ? <div></div> : 
                   <div className="search-results">
-                    <h2 ref={this.headingElement}>Related Artists</h2>
+                    <h2 ref={this.headingElement} tabIndex="4">Related Artists</h2>
 
                     <ul className="related-artist-results">
                         {this.state.relatedArtistInfo.map((info, index) => {
                         let imageUrl = info.image[3]['#text'];
                         return (
-                          <RelatedArtists key={index} imageUrl={imageUrl} artist={info.artist.name} albumUrl={info.artist.url} playCount={info.playcount} albumName={info.name} scrollToMyRef={this.scrollToMyRef}/>)
+                          <RelatedArtists key={index} imageUrl={imageUrl} artist={info.artist.name} albumUrl={info.artist.url} playCount={info.playcount} albumName={info.name} scrollToMyRef={this.scrollToMyRef} tabindex={index}/>)
                       })}
                     </ul>
                   </div>
@@ -327,13 +357,14 @@ class App extends Component {
               <section className="related-tracks">
                 {this.state.isHidden ? <div></div> : 
                   <div className="top-tracks">
-                    <h2>Top Tracks for {this.state.userArtist}</h2>
+                    <h2 tabIndex="5">Top Tracks for {this.state.userArtist}</h2>
+                    <a href="#previous-searches" className="visually-hidden skip-link"> Skip Top Tracks Section for your chosen artist and skip to Recently Searched Artists</a>
                     <ul className="related-artist-tracks">
                       {this.state.relatedArtistTracks.map((track, index) => {
                         return(
                           track.map((index, indexTrack) => {
                             return (
-                              <RelatedTracks key={indexTrack} headingRef={this.headingElement} songName={index.name} songUrl={index.url} />
+                              <RelatedTracks key={indexTrack} headingRef={this.headingElement} songName={index.name} songUrl={index.url} tabIndex={index}/>
                             )
                           })
                         )
@@ -343,15 +374,15 @@ class App extends Component {
                 }
               </section>
 
-              <section className="previous-user-searches">
+              <section className="previous-user-searches" id="previous-searches">
                 {this.state.isHidden ? <div></div> :
                   <div className="other-searches">
-                    <h2>Recently Searched</h2>
+                    <h2 tabIndex="6">Recently Viewed Artists</h2>
                     <ul className="previous-artist-searches">
-                      {this.state.previousUserArtists.map((artist, index) => {
+                      {this.state.recentlyViewedArtists.map((artist, index) => {
                         return(
-                          <li key={index}>
-                              <p>{artist.name}</p>
+                          <li key={index} className="previous-artist-searches-card" onClick={this.artistSearch} data-id={artist.name}>
+                                <p className="artist-name" tabIndex={index}>{artist.name}</p>
                           </li>
                         )
                       })}

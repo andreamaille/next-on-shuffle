@@ -2,21 +2,54 @@
 .previous-user-searches {
     margin:50px 0;
 }
+
 .previous-artist-searches {
     @include alignment (row, space-between, flex-start, center);
     flex-wrap: wrap;
     margin-top:20px;
-    li {
+}
+
+.previous-artist-searches-card{
+    cursor: pointer;
     display: block;
-    width:200px;
-    height:200px;
-    margin: 10px auto;
+    width:215px;
+    height:215px;
+    margin: 5px auto;
     background-color: $accentColor;
     border-radius: 50%;
-        p {
-            margin-top:50px;
+    position: relative;
+    background-blend-mode: multiply;
+        &:hover{
+            background-blend-mode: overlay;
+            border: 4px solid $white;
         }
-    }
+}
+
+.artist-name {
+    margin: 60px auto 0;
+    padding:5px;
+    display:block;
+    width:85%;
 
 }
-    
+
+
+.previous-artist-searches-card:first-child {
+    background:url(./assets/mixtape.jpg) center / cover no-repeat $secondaryColor;
+}
+
+.previous-artist-searches-card:nth-of-type(2) {
+    background:url(./assets/listening-music.jpg) center / cover no-repeat $secondaryColor;
+}
+
+.previous-artist-searches-card:nth-of-type(3) {
+    background:url(./assets/headphones.jpg) center / cover no-repeat $secondaryColor;
+}
+
+.previous-artist-searches-card:nth-of-type(4) {
+    background:url(./assets/headphones-2.jpg) center / cover no-repeat $secondaryColor;
+}
+
+.previous-artist-searches-card:last-child {
+    background:url(./assets/ipod.jpg) center / cover no-repeat $secondaryColor;
+}
