@@ -36,7 +36,7 @@
       "last 1 safari version"
     ]
   },
-  "homepage": "https://andreamaille.github.io/andrea-maille-project-five/",
+  "homepage": "https://andreamaille.github.io/next-on-shuffle/",
 
     "scripts": {
     "predeploy": "npm run build",
