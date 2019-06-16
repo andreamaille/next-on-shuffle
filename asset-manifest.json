@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/andrea-maille-project-five/static/css/main.fde01650.chunk.css",
-    "main.js": "/andrea-maille-project-five/static/js/main.4beb57d3.chunk.js",
-    "main.js.map": "/andrea-maille-project-five/static/js/main.4beb57d3.chunk.js.map",
-    "runtime~main.js": "/andrea-maille-project-five/static/js/runtime~main.c5ae9c19.js",
-    "runtime~main.js.map": "/andrea-maille-project-five/static/js/runtime~main.c5ae9c19.js.map",
-    "static/js/2.d27cf5fa.chunk.js": "/andrea-maille-project-five/static/js/2.d27cf5fa.chunk.js",
-    "static/js/2.d27cf5fa.chunk.js.map": "/andrea-maille-project-five/static/js/2.d27cf5fa.chunk.js.map",
-    "index.html": "/andrea-maille-project-five/index.html",
-    "precache-manifest.2f31287a1779e5786b2cd1373c6b24a1.js": "/andrea-maille-project-five/precache-manifest.2f31287a1779e5786b2cd1373c6b24a1.js",
-    "service-worker.js": "/andrea-maille-project-five/service-worker.js",
-    "static/css/main.fde01650.chunk.css.map": "/andrea-maille-project-five/static/css/main.fde01650.chunk.css.map",
-    "static/media/App.scss": "/andrea-maille-project-five/static/media/mixtape.9cef9b6f.jpg"
+    "main.css": "/next-on-shuffle/static/css/main.77a4d983.chunk.css",
+    "main.js": "/next-on-shuffle/static/js/main.ae669c58.chunk.js",
+    "main.js.map": "/next-on-shuffle/static/js/main.ae669c58.chunk.js.map",
+    "runtime~main.js": "/next-on-shuffle/static/js/runtime~main.3f43d1b2.js",
+    "runtime~main.js.map": "/next-on-shuffle/static/js/runtime~main.3f43d1b2.js.map",
+    "static/js/2.7dd986f4.chunk.js": "/next-on-shuffle/static/js/2.7dd986f4.chunk.js",
+    "static/js/2.7dd986f4.chunk.js.map": "/next-on-shuffle/static/js/2.7dd986f4.chunk.js.map",
+    "index.html": "/next-on-shuffle/index.html",
+    "precache-manifest.c68b3c90290d523754b21e848c407764.js": "/next-on-shuffle/precache-manifest.c68b3c90290d523754b21e848c407764.js",
+    "service-worker.js": "/next-on-shuffle/service-worker.js",
+    "static/css/main.77a4d983.chunk.css.map": "/next-on-shuffle/static/css/main.77a4d983.chunk.css.map",
+    "static/media/App.scss": "/next-on-shuffle/static/media/mixtape.9cef9b6f.jpg"
   }
 }
